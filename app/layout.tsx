@@ -2,10 +2,17 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import NavBar from "./NavBar";
-import "@radix-ui/themes/styles.css";
-import { Theme } from "@radix-ui/themes";
+// import "@radix-ui/themes/styles.css";
+// import { Theme } from "@radix-ui/themes";
+import "@mantine/core/styles.css";
+import { MantineProvider, createTheme } from "@mantine/core";
+import { ColorSchemeScript } from "@mantine/core";
 
 const inter = Inter({ subsets: ["latin"] });
+
+const theme = createTheme({
+	/** Put your mantine theme override here */
+});
 
 export const metadata: Metadata = {
 	title: "Create Next App",
@@ -15,11 +22,14 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
 	return (
 		<html lang="en">
+			<head>
+				<ColorSchemeScript />
+			</head>
 			<body className={inter.className}>
-				<Theme>
+				<MantineProvider theme={theme}>
 					<NavBar />
-					<main>{children}</main>
-				</Theme>
+					<main className="p-5">{children}</main>
+				</MantineProvider>
 			</body>
 		</html>
 	);
