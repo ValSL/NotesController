@@ -11,7 +11,8 @@ import { ColorSchemeScript } from "@mantine/core";
 const inter = Inter({ subsets: ["latin"] });
 
 const theme = createTheme({
-	/** Put your mantine theme override here */
+	fontFamily: inter.style.fontFamily,
+	primaryColor: 'violet'
 });
 
 export const metadata: Metadata = {
@@ -25,7 +26,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 			<head>
 				<ColorSchemeScript />
 			</head>
-			<body className={inter.className}>
+			{/* <body className={inter.className}> */}
+			<body >
 				<MantineProvider theme={theme}>
 					<NavBar />
 					<main className="p-5">{children}</main>
