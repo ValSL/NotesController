@@ -1,15 +1,8 @@
+import { createNoteSchema } from "@/app/validationSchemas";
 import prisma from "@/prisma/prismaClient";
 import { z } from "zod";
 
-interface NoteRequest {
-	title: string;
-	description: string;
-}
-
-const createNoteSchema = z.object({
-	title: z.string().min(1).max(255),
-	description: z.string().min(1),
-});
+type NoteRequest = z.infer<typeof createNoteSchema>
 
 export async function POST(request: Request) {
 	const requestData: NoteRequest = await request.json();

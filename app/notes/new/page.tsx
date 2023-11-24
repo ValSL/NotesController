@@ -1,36 +1,50 @@
 "use client";
 
-import { Button, TextInput, Textarea } from "@mantine/core";
+import { Alert, Button, Text, TextInput, Textarea } from "@mantine/core";
 import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { createNoteSchema } from "@/app/validationSchemas";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-interface NewNoteForm {
-	title: string;
-	description: string;
-}
+type NewNoteForm = z.infer<typeof createNoteSchema>
 
 const NewNotePage = () => {
-	const { register, handleSubmit, control } = useForm<NewNoteForm>();
+	const [error, setError] = useState("");
+
+	const { register, handleSubmit, formState: { errors },control } = useForm<NewNoteForm>({
+		resolver: zodResolver(createNoteSchema)
+	});
 	const router = useRouter();
 
 	const submitHandler: SubmitHandler<NewNoteForm> = async (data) => {
-		await axios.post("/api/notes", data);
-		router.push("/");
+		try {
+			await axios.post("/api/notes", data);
+			router.push("/");
+		} catch (error) {
+			setError("An exception was occured");
+		}
 	};
 
 	return (
-		<form className="max-w-xl space-y-3" onSubmit={handleSubmit(submitHandler)}>
-			<TextInput placeholder="Title" {...register("title")} />
-			<Controller
-				control={control}
-				name="description"
-				render={({ field }) => <SimpleMDE placeholder="Description" {...field} />}
-			/>
-			<Button type="submit">Go</Button>
-		</form>
+		<div className="max-w-xl">
+			{error && <Alert color="red" title="Error" className="mb-5">{error}</Alert>}
+			<form className="space-y-3" onSubmit={handleSubmit(submitHandler)}>
+				<TextInput placeholder="Title" {...register("title")} />
+				{errors && <Text c="red">{errors.title?.message}</Text>}
+				<Controller
+					control={control}
+					name="description"
+					render={({ field }) => <SimpleMDE placeholder="Description" {...field}/>}
+				/>
+				{errors && <Text c="red">{errors.description?.message}</Text>}
+				<Button type="submit">Create note</Button>
+			</form>
+		</div>
 	);
 };
 
