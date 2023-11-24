@@ -2,6 +2,7 @@ import { Button, Table, TableTbody, TableTd, TableTh, TableThead, TableTr, Text 
 import prisma from "@/prisma/prismaClient";
 import Link from "next/link";
 import classes from "./table.module.css"
+import NoteBadge from "../components/NoteBadge/NoteBadge";
 
 const NotesPage = async () => {
 	const notes = await prisma.note.findMany();
@@ -10,9 +11,9 @@ const NotesPage = async () => {
 		<TableTr key={element.id}>
 			<TableTd>
 				{element.title}
-				<div className="block md:hidden">{element.status}</div>
+				<div className="block md:hidden"><NoteBadge status={element.status}/></div>
 			</TableTd>
-			<TableTd className="hidden md:table-cell">{element.status}</TableTd>
+			<TableTd className="hidden md:table-cell"><NoteBadge status={element.status}/></TableTd>
 			<TableTd className="hidden md:table-cell">{element.description}</TableTd>
 		</TableTr>
 	));

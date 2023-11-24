@@ -1,0 +1,9 @@
+.badgeRedText {
+    color: var(--mantine-color-red-6)
+}
+.badgeVioletText {
+    color: var(--mantine-color-violet-6)
+}
+.badgeGreenText {
+    color: var(--mantine-color-green-6)
+}
