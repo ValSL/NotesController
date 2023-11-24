@@ -26,6 +26,7 @@ const NewNotePage = () => {
 	} = useForm<NewNoteForm>({
 		resolver: zodResolver(createNoteSchema),
 	});
+	
 	const router = useRouter();
 
 	const submitHandler: SubmitHandler<NewNoteForm> = async (data) => {

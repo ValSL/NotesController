@@ -2,7 +2,7 @@ import { createNoteSchema } from "@/app/validationSchemas";
 import prisma from "@/prisma/prismaClient";
 import { z } from "zod";
 
-type NoteRequest = z.infer<typeof createNoteSchema>
+type NoteRequest = z.infer<typeof createNoteSchema>;
 
 export async function POST(request: Request) {
 	const requestData: NoteRequest = await request.json();
@@ -19,5 +19,14 @@ export async function POST(request: Request) {
 		},
 	});
 
-	return Response.json(newNote, {status: 201});
+	return Response.json(newNote, { status: 201 });
+}
+
+export async function GET(request: Request) {
+	try {
+		const notes = await prisma.note.findMany();
+		return Response.json(notes, { status: 200 });
+	} catch (error) {
+		return Response.json("An error was occured", { status: 400 });
+	}
 }
