@@ -10,39 +10,55 @@ import { useState } from "react";
 import { createNoteSchema } from "@/app/validationSchemas";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import ErrorMessage from "@/app/components/ErrorMessage";
 
-type NewNoteForm = z.infer<typeof createNoteSchema>
+type NewNoteForm = z.infer<typeof createNoteSchema>;
 
 const NewNotePage = () => {
 	const [error, setError] = useState("");
+	const [isSubmitting, setIsSubmitting] = useState(false);
 
-	const { register, handleSubmit, formState: { errors },control } = useForm<NewNoteForm>({
-		resolver: zodResolver(createNoteSchema)
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+		control,
+	} = useForm<NewNoteForm>({
+		resolver: zodResolver(createNoteSchema),
 	});
 	const router = useRouter();
 
 	const submitHandler: SubmitHandler<NewNoteForm> = async (data) => {
 		try {
+			setIsSubmitting(true);
 			await axios.post("/api/notes", data);
 			router.push("/");
 		} catch (error) {
+			setIsSubmitting(false);
 			setError("An exception was occured");
 		}
+		setIsSubmitting(false);
 	};
 
 	return (
 		<div className="max-w-xl">
-			{error && <Alert color="red" title="Error" className="mb-5">{error}</Alert>}
+			{error && (
+				<Alert color="red" title="Error" className="mb-5">
+					{error}
+				</Alert>
+			)}
 			<form className="space-y-3" onSubmit={handleSubmit(submitHandler)}>
 				<TextInput placeholder="Title" {...register("title")} />
-				{errors && <Text c="red">{errors.title?.message}</Text>}
+				<ErrorMessage>{errors.title?.message}</ErrorMessage>
 				<Controller
 					control={control}
 					name="description"
-					render={({ field }) => <SimpleMDE placeholder="Description" {...field}/>}
+					render={({ field }) => <SimpleMDE placeholder="Description" {...field} />}
 				/>
-				{errors && <Text c="red">{errors.description?.message}</Text>}
-				<Button type="submit">Create note</Button>
+				<ErrorMessage>{errors.description?.message}</ErrorMessage>
+				<Button type="submit" loading={isSubmitting}>
+					Create note
+				</Button>
 			</form>
 		</div>
 	);
