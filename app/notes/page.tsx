@@ -8,12 +8,12 @@ import delay from "delay";
 
 const NotesPage = async () => {
 	const notes = await prisma.note.findMany();
-	await delay(2000);
+	await delay(1000);
 
 	const rows = notes.map((element) => (
 		<TableTr key={element.id}>
 			<TableTd>
-				{element.title}
+				<Link href={`notes/${element.id}`}>{element.title}</Link>
 				<div className="block md:hidden"><NoteBadge status={element.status}/></div>
 			</TableTd>
 			<TableTd className="hidden md:table-cell"><NoteBadge status={element.status}/></TableTd>
