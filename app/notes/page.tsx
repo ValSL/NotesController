@@ -3,9 +3,12 @@ import prisma from "@/prisma/prismaClient";
 import Link from "next/link";
 import classes from "./table.module.css"
 import NoteBadge from "../components/NoteBadge/NoteBadge";
+import NotesActions from './notesActions';
+import delay from "delay";
 
 const NotesPage = async () => {
 	const notes = await prisma.note.findMany();
+	await delay(2000);
 
 	const rows = notes.map((element) => (
 		<TableTr key={element.id}>
@@ -20,11 +23,7 @@ const NotesPage = async () => {
 
 	return (
 		<div>
-			<div className="mb-5">
-				<Button>
-					<Link href="/notes/new">New Note</Link>
-				</Button>
-			</div>
+			<NotesActions/>
 			<Table>
 				<TableThead>
 					<TableTr>
