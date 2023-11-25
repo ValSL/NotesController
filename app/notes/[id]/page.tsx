@@ -5,6 +5,7 @@ import { Note } from "@prisma/client";
 import { Flex, Paper, Title } from "@mantine/core";
 import NoteBadge from "@/app/components/NoteBadge/NoteBadge";
 import Markdown from "react-markdown";
+import delay from "delay";
 
 interface NoteDetailProps {
 	params: {
@@ -13,6 +14,7 @@ interface NoteDetailProps {
 }
 
 const NoteDetailPage = async ({ params }: NoteDetailProps) => {
+ 
 	const note: Note | null = await prisma.note.findUnique({
 		where: {
 			id: parseInt(params.id),

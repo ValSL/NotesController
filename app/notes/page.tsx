@@ -5,6 +5,7 @@ import classes from "./table.module.css"
 import NoteBadge from "../components/NoteBadge/NoteBadge";
 import NotesActions from './notesActions';
 import delay from "delay";
+import CustomLink from "../components/CustomLink/CustomLink";
 
 const NotesPage = async () => {
 	const notes = await prisma.note.findMany();
@@ -13,7 +14,7 @@ const NotesPage = async () => {
 	const rows = notes.map((element) => (
 		<TableTr key={element.id}>
 			<TableTd>
-				<Link href={`notes/${element.id}`}>{element.title}</Link>
+				<CustomLink href={`notes/${element.id}`}>{element.title}</CustomLink>
 				<div className="block md:hidden"><NoteBadge status={element.status}/></div>
 			</TableTd>
 			<TableTd className="hidden md:table-cell"><NoteBadge status={element.status}/></TableTd>

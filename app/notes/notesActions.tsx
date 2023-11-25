@@ -5,8 +5,8 @@ import React from "react";
 const NotesActions = () => {
 	return (
 		<div className="mb-5">
-			<Button>
-				<Link href="/notes/new">New Note</Link>
+			<Button component={Link} href="/notes/new">
+				New Note
 			</Button>
 		</div>
 	);
