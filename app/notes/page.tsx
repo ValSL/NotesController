@@ -1,15 +1,10 @@
-import { Button, Table, TableTbody, TableTd, TableTh, TableThead, TableTr, Text } from "@mantine/core";
 import prisma from "@/prisma/prismaClient";
-import Link from "next/link";
-import classes from "./table.module.css"
-import NoteBadge from "../components/NoteBadge/NoteBadge";
+import { Table, TableTbody, TableTd, TableTh, TableThead, TableTr } from "@mantine/core";
 import NotesActions from './notesActions';
-import delay from "delay";
-import CustomLink from "../components/CustomLink/CustomLink";
+import { CustomLink, NoteBadge } from "@/app/components";
 
 const NotesPage = async () => {
 	const notes = await prisma.note.findMany();
-	await delay(1000);
 
 	const rows = notes.map((element) => (
 		<TableTr key={element.id}>
