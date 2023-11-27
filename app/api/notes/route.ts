@@ -1,12 +1,12 @@
-import { createNoteSchema } from "@/app/validationSchemas";
+import { noteSchema } from "@/app/validationSchemas";
 import prisma from "@/prisma/prismaClient";
 import { z } from "zod";
 
-type NoteRequest = z.infer<typeof createNoteSchema>;
+type NoteRequest = z.infer<typeof noteSchema>;
 
 export async function POST(request: Request) {
 	const requestData: NoteRequest = await request.json();
-	const validationResult = createNoteSchema.safeParse(requestData);
+	const validationResult = noteSchema.safeParse(requestData);
 
 	if (!validationResult.success) {
 		return Response.json(validationResult.error.errors, { status: 400 });

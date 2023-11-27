@@ -1,26 +1,11 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
-import NavBar from "./NavBar";
-// import "@radix-ui/themes/styles.css";
-// import { Theme } from "@radix-ui/themes";
+import { ColorSchemeScript, MantineProvider } from "@mantine/core";
 import "@mantine/core/styles.css";
-import { Button, CSSVariablesResolver, MantineProvider, Table, createTheme } from "@mantine/core";
-import { ColorSchemeScript } from "@mantine/core";
+import type { Metadata } from "next";
+import NavBar from "./NavBar";
+import "./globals.css";
 import { theme } from "./theme";
-// const inter = Inter({ subsets: ["latin"] });
 
-// const theme = createTheme({
-// 	fontFamily: inter.style.fontFamily,
-// 	primaryColor: "violet",
-// 	components: {
-// 		Button: Button.extend({
-// 			styles: {
-// 				root: { backgroundColor: 'red' },
-// 			},
-// 		}),
-// 	},
-// });
+
 
 export const metadata: Metadata = {
 	title: "Create Next App",
