@@ -1,6 +1,4 @@
-import { Button, Table, TableThead, TableTr, TableTh, TableTbody, TableTd, Skeleton } from "@mantine/core";
-import Link from "next/link";
-import React from "react";
+import { Skeleton, Table, TableTbody, TableTd, TableTh, TableThead, TableTr } from "@mantine/core";
 import NotesActions from "./notesActions";
 
 const NotesLoading = () => {

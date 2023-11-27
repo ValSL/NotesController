@@ -6,14 +6,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Alert, Button, TextInput } from "@mantine/core";
 import { Note } from "@prisma/client";
 import axios from "axios";
-import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
-// import SimpleMDE from "react-simplemde-editor";
-import MDEditor from '@uiw/react-md-editor';
-// const MDEditor = dynamic(() => import('@uiw/react-md-editor'), { ssr: false });
+import MDEditor from "@uiw/react-md-editor";
 
 type NewNoteForm = z.infer<typeof noteSchema>;
 
@@ -35,12 +32,13 @@ const NoteForm = ({ note }: { note?: Note }) => {
 	const submitHandler: SubmitHandler<NewNoteForm> = async (data) => {
 		try {
 			setIsSubmitting(true);
-			if(note){
+
+			if (note) {
 				await axios.patch("/api/notes/" + note.id, data);
-			}
-			else{
+			} else {
 				await axios.post("/api/notes", data);
 			}
+
 			router.push("/notes");
 		} catch (error) {
 			setIsSubmitting(false);
@@ -56,21 +54,23 @@ const NoteForm = ({ note }: { note?: Note }) => {
 					{error}
 				</Alert>
 			)}
+			
 			<form className="space-y-3" onSubmit={handleSubmit(submitHandler)}>
 				<TextInput defaultValue={note?.title} placeholder="Title" {...register("title")} />
 				<ErrorMessage>{errors.title?.message}</ErrorMessage>
+
 				<div data-color-mode="light">
-				<Controller
-					control={control}
-					defaultValue={note?.description}
-					name="description"
-					render={({ field }) => <MDEditor  placeholder="Description" {...field} />}
-				/>
+					<Controller
+						control={control}
+						defaultValue={note?.description}
+						name="description"
+						render={({ field }) => <MDEditor placeholder="Description" {...field} />}
+					/>
 				</div>
-				
 				<ErrorMessage>{errors.description?.message}</ErrorMessage>
+
 				<Button type="submit" loading={isSubmitting}>
-					{note ? 'Update note' : 'Create note'}
+					{note ? "Update note" : "Create note"}
 				</Button>
 			</form>
 		</div>
