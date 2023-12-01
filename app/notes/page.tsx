@@ -3,6 +3,8 @@ import { Table, TableTbody, TableTd, TableTh, TableThead, TableTr } from "@manti
 import NotesActions from './notesActions';
 import { CustomLink, NoteBadge } from "@/app/components";
 
+export const dynamic = 'force-dynamic';
+
 const NotesPage = async () => {
 	const notes = await prisma.note.findMany();
 

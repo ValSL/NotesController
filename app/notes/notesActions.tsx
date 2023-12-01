@@ -1,6 +1,5 @@
 import { Button } from "@mantine/core";
 import Link from "next/link";
-import React from "react";
 
 const NotesActions = () => {
 	return (

@@ -3,14 +3,13 @@
 import ErrorMessage from "@/app/components/ErrorMessage";
 import { noteSchema } from "@/app/validationSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Alert, Button, TextInput } from "@mantine/core";
+import { Alert, Button, TextInput, Textarea } from "@mantine/core";
 import { Note } from "@prisma/client";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
-import MDEditor from "@uiw/react-md-editor";
 
 type NewNoteForm = z.infer<typeof noteSchema>;
 
@@ -22,7 +21,6 @@ const NoteForm = ({ note }: { note?: Note }) => {
 		register,
 		handleSubmit,
 		formState: { errors },
-		control,
 	} = useForm<NewNoteForm>({
 		resolver: zodResolver(noteSchema),
 	});
@@ -32,7 +30,8 @@ const NoteForm = ({ note }: { note?: Note }) => {
 	const submitHandler: SubmitHandler<NewNoteForm> = async (data) => {
 		try {
 			setIsSubmitting(true);
-
+			console.log(data);
+			
 			if (note) {
 				await axios.patch("/api/notes/" + note.id, data);
 			} else {
@@ -40,6 +39,7 @@ const NoteForm = ({ note }: { note?: Note }) => {
 			}
 
 			router.push("/notes");
+			router.refresh();
 		} catch (error) {
 			setIsSubmitting(false);
 			setError("An exception was occured");
@@ -58,17 +58,10 @@ const NoteForm = ({ note }: { note?: Note }) => {
 			<form className="space-y-3" onSubmit={handleSubmit(submitHandler)}>
 				<TextInput defaultValue={note?.title} placeholder="Title" {...register("title")} />
 				<ErrorMessage>{errors.title?.message}</ErrorMessage>
-
-				<div data-color-mode="light">
-					<Controller
-						control={control}
-						defaultValue={note?.description}
-						name="description"
-						render={({ field }) => <MDEditor placeholder="Description" {...field} />}
-					/>
-				</div>
+				
+				<Textarea {...register("description")} defaultValue={note?.description} placeholder="Description"></Textarea>
 				<ErrorMessage>{errors.description?.message}</ErrorMessage>
-
+				
 				<Button type="submit" loading={isSubmitting}>
 					{note ? "Update note" : "Create note"}
 				</Button>
