@@ -1,13 +1,13 @@
 import { noteSchema } from "@/app/validationSchemas";
 import prisma from "@/prisma/prismaClient";
 
-interface UpdateNoteProps {
+interface NoteProps {
 	params: {
 		id: string;
 	};
 }
 
-export async function PATCH(request: Request, { params }: UpdateNoteProps) {
+export async function PATCH(request: Request, { params }: NoteProps) {
 	const body = await request.json();
 	const existingNote = await prisma.note.findUnique({
 		where: {
@@ -27,11 +27,27 @@ export async function PATCH(request: Request, { params }: UpdateNoteProps) {
 		where: {
 			id: existingNote.id,
 		},
-        data: {
-            title: body.title,
-            description: body.description
-        }
+		data: {
+			title: body.title,
+			description: body.description,
+		},
 	});
 
-    return Response.json(updatedNote)
+	return Response.json(updatedNote);
+}
+
+export async function DELETE(request: Request, { params }: NoteProps) {
+	const note = await prisma.note.findUnique({ where: { id: parseInt(params.id) } });
+
+	if (!note) {
+		return Response.json({ data: '"Invalid note"' }, { status: 404 });
+	}
+
+	await prisma.note.delete({
+		where: {
+			id: parseInt(params.id),
+		},
+	});
+
+	return Response.json({});
 }
