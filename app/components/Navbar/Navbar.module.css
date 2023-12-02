@@ -1,0 +1,40 @@
+.navContainer {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	border-bottom: 1px solid var(--mantine-color-gray-4);
+	padding-left: 1.25rem; /* 20px */
+	padding-right: 1.25rem; /* 20px */
+	height: 3.5rem;
+	margin-bottom: 1.25rem;
+}
+
+.navLinks {
+	display: flex;
+	gap: 1rem;
+}
+
+.text {
+	text-decoration: none;
+}
+
+.navbarTextZinc9 {
+	color: var(--mantine-color-gray-9);
+	text-decoration: none;
+}
+
+.navbarTextZinc5 {
+	color: var(--mantine-color-gray-5);
+	text-decoration: none;
+}
+
+.navbarTextZinc5:hover {
+	color: var(--mantine-color-gray-7);
+	text-decoration: none;
+}
+
+.trans {
+	transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+	transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+	transition-duration: 150ms;
+}

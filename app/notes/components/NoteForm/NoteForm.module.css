@@ -1,0 +1,13 @@
+.formContainer{ 
+    max-width: 36rem;
+}
+
+.form{
+    /* display: flex;
+    flex-direction: column; */
+    gap: 1.25rem;
+}
+
+.alert{
+    margin-bottom: 1.25rem;
+}

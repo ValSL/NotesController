@@ -1,0 +1,12 @@
+.notesList{
+    @media(max-width: em(750px)){
+        display: none;
+    }
+}
+
+.smallStatus{
+    display: none;
+    @media(max-width: em(750px)){
+        display: block;
+    }
+}

@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
+import classes from "./NoteForm.module.css";
 
 type NewNoteForm = z.infer<typeof noteSchema>;
 
@@ -48,14 +49,14 @@ const NoteForm = ({ note }: { note?: Note }) => {
 	};
 
 	return (
-		<div className="max-w-xl">
+		<div className={classes.formContainer}>
 			{error && (
-				<Alert color="red" title="Error" className="mb-5">
+				<Alert color="red" title="Error" className={classes.alert}>
 					{error}
 				</Alert>
 			)}
 			
-			<form className="space-y-3" onSubmit={handleSubmit(submitHandler)}>
+			<form className={classes.form} onSubmit={handleSubmit(submitHandler)}>
 				<TextInput defaultValue={note?.title} placeholder="Title" {...register("title")} />
 				<ErrorMessage>{errors.title?.message}</ErrorMessage>
 				

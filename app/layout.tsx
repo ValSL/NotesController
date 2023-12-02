@@ -1,9 +1,10 @@
-import { ColorSchemeScript, MantineProvider } from "@mantine/core";
+import { Box, ColorSchemeScript, MantineProvider } from "@mantine/core";
 import "@mantine/core/styles.css";
 import type { Metadata } from "next";
-import NavBar from "./NavBar";
+// import NavBar from "./NavBar";
 import "./globals.css";
 import { theme } from "./theme";
+import NavBar from './components/Navbar/index';
 
 
 
@@ -23,7 +24,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 			<body>
 				<MantineProvider theme={theme}>
 					<NavBar />
-					<main className="p-5">{children}</main>
+					<Box p="1.35rem">{children}</Box>
 				</MantineProvider>
 			</body>
 		</html>
