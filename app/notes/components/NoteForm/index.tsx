@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
+import classes from "./noteForm.module.css"
 
 type NewNoteForm = z.infer<typeof noteSchema>;
 
@@ -62,7 +63,7 @@ const NoteForm = ({ note }: { note?: Note }) => {
 				<Textarea {...register("description")} defaultValue={note?.description} placeholder="Description"></Textarea>
 				<ErrorMessage>{errors.description?.message}</ErrorMessage>
 				
-				<Button type="submit" loading={isSubmitting}>
+				<Button className={classes.button} type="submit" loading={isSubmitting}>
 					{note ? "Update note" : "Create note"}
 				</Button>
 			</form>
