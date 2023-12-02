@@ -34,7 +34,7 @@ const NoteDetailPage = async ({ params }: NoteDetailProps) => {
 				<Button leftSection={<Pencil2Icon />} component={Link} href={`/notes/${params.id}/edit`}>
 					Edit note
 				</Button>
-				<DeleteNoteButton/>
+				<DeleteNoteButton id={params.id}/>
 			</Flex>
 		</SimpleGrid>
 	);

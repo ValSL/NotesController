@@ -1,25 +1,26 @@
-'use client'
+"use client";
 
 import { Button, Text } from "@mantine/core";
 import { modals } from "@mantine/modals";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
-const DeleteNoteButton = () => {
-    const test = () => {
-        console.log("Confirmed")
-    }
+const DeleteNoteButton = ({ id }: { id: string }) => {
+	const router = useRouter();
+
 	const openDeleteModal = () =>
 		modals.openConfirmModal({
 			title: "Delete note",
 			centered: true,
-			children: (
-				<Text size="sm">
-					Are you sure you want to delete note?
-				</Text>
-			),
+			children: <Text size="sm">Are you sure you want to delete note?</Text>,
 			labels: { confirm: "Delete note", cancel: "Cancel" },
 			confirmProps: { color: "red" },
-			onCancel: () => console.log("Cancel"),
-			onConfirm: () => console.log("Confirmed"),
+			onCancel: () => {},
+			onConfirm: async () => {
+				await axios.delete(`/api/notes/${id}`);
+				router.push("/notes");
+				router.refresh();
+			},
 		});
 
 	return (
