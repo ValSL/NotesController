@@ -1,10 +1,12 @@
 import { ColorSchemeScript, Container, MantineProvider } from "@mantine/core";
 import "@mantine/core/styles.css";
+import "@mantine/notifications/styles.css";
 import type { Metadata } from "next";
 import NavBar from "./NavBar";
 import "./globals.css";
 import { theme } from "./theme";
 import { ModalsProvider } from "@mantine/modals";
+import { Notifications } from "@mantine/notifications";
 
 export const metadata: Metadata = {
 	title: "Create Next App",
@@ -21,6 +23,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 			<body>
 				<MantineProvider theme={theme}>
 					<ModalsProvider>
+						<Notifications />
 						<NavBar />
 						<Container>
 							<main className="p-5">{children}</main>

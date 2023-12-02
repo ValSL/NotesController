@@ -4,9 +4,35 @@ import { Button, Text } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { notifications } from "@mantine/notifications";
 
 const DeleteNoteButton = ({ id }: { id: string }) => {
 	const router = useRouter();
+	const [successNotify, setSuccessNotify] = useState(false);
+
+	const deleteNote = async () => {
+		try {
+			const result = await axios.delete(`/api/notes/${id}`);
+			console.log(result);
+			router.push("/notes");
+			router.refresh();
+
+			notifications.show({
+				title: "Success!",
+				message: "Note has been deleted!",
+				autoClose: 5000,
+				color: "green",
+			});
+		} catch (error) {
+			notifications.show({
+				title: "Error",
+				message: "Failed to delete note",
+				autoClose: 5000,
+				color: "red",
+			});
+		}
+	};
 
 	const openDeleteModal = () =>
 		modals.openConfirmModal({
@@ -16,10 +42,8 @@ const DeleteNoteButton = ({ id }: { id: string }) => {
 			labels: { confirm: "Delete note", cancel: "Cancel" },
 			confirmProps: { color: "red" },
 			onCancel: () => {},
-			onConfirm: async () => {
-				await axios.delete(`/api/notes/${id}`);
-				router.push("/notes");
-				router.refresh();
+			onConfirm: () => {
+				deleteNote();
 			},
 		});
 
