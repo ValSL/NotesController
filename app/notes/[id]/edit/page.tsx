@@ -1,7 +1,13 @@
 import React from "react";
-import NoteForm from "../../components/NoteForm";
 import prisma from "@/prisma/prismaClient";
 import { notFound } from "next/navigation";
+import dynamic from "next/dynamic";
+import NoteFormSkeleton from '@/app/notes/components/NoteFormSkeleton';
+
+const NoteForm = dynamic(() => import("@/app/notes/components/NoteForm"), {
+	ssr: false,
+	loading: () => <NoteFormSkeleton />
+})
 
 const NoteEditPage = async ({ params }: { params: { id: string } }) => {
 	const note = await prisma.note.findUnique({

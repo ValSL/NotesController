@@ -16,7 +16,7 @@ const NoteDetails = ({ note }: NoteDetailsProps) => {
 				<NoteBadge status={note.status} />
 				<p>{note.createdAt.toDateString()}</p>
 			</Flex>
-			<Paper withBorder p={10} className="prose" mt="xl">
+			<Paper withBorder p={10} className="prose max-w-full" mt="xl">
 				<Markdown>{note.description}</Markdown>
 			</Paper>
 		</>

@@ -1,0 +1,6 @@
+.mainContent {
+	grid-column: 1 / span 4;
+	@media (max-width: 62em) {
+		grid-column: 1;
+	}
+}
