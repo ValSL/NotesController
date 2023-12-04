@@ -31,7 +31,7 @@ const NoteDetailPage = async ({ params }: NoteDetailProps) => {
 				<NoteDetails note={note} />
 			</Box>
 			<Flex direction='column' gap="1rem">
-				<Button leftSection={<Pencil2Icon />} component={Link} href={`/notes/${params.id}/edit`}>
+				<Button leftSection={<Pencil2Icon />} component={Link} href={`/notes/edit/${params.id}`}>
 					Edit note
 				</Button>
 				<DeleteNoteButton id={params.id}/>

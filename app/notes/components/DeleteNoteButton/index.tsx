@@ -9,13 +9,13 @@ import { notifications } from "@mantine/notifications";
 
 const DeleteNoteButton = ({ id }: { id: string }) => {
 	const router = useRouter();
-	const [successNotify, setSuccessNotify] = useState(false);
+	const [isLoading, setIsLoading] = useState<boolean>();
 
 	const deleteNote = async () => {
 		try {
-			const result = await axios.delete(`/api/notes/${id}`);
-			console.log(result);
-			router.push("/notes");
+			setIsLoading(true);
+			await axios.delete(`/api/notes/${id}`).finally(() => setIsLoading(false));
+			router.push("/notes/list");
 			router.refresh();
 
 			notifications.show({
@@ -25,6 +25,7 @@ const DeleteNoteButton = ({ id }: { id: string }) => {
 				color: "green",
 			});
 		} catch (error) {
+			setIsLoading(false)
 			notifications.show({
 				title: "Error",
 				message: "Failed to delete note",
@@ -48,7 +49,7 @@ const DeleteNoteButton = ({ id }: { id: string }) => {
 		});
 
 	return (
-		<Button onClick={openDeleteModal} color="red">
+		<Button onClick={openDeleteModal} loading={isLoading} color="red">
 			Delete note
 		</Button>
 	);

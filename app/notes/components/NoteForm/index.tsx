@@ -42,7 +42,7 @@ const NoteForm = ({ note }: { note?: Note }) => {
 				await axios.post("/api/notes", data);
 			}
 
-			router.push("/notes");
+			router.push("/notes/list");
 			router.refresh();
 		} catch (error) {
 			setIsSubmitting(false);

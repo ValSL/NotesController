@@ -11,7 +11,7 @@ const NotesPage = async () => {
 	const rows = notes.map((element) => (
 		<TableTr key={element.id}>
 			<TableTd>
-				<CustomLink href={`notes/${element.id}`}>{element.title}</CustomLink>
+				<CustomLink href={`/notes/${element.id}`}>{element.title}</CustomLink>
 				<div className="block md:hidden"><NoteBadge status={element.status}/></div>
 			</TableTd>
 			<TableTd className="hidden md:table-cell"><NoteBadge status={element.status}/></TableTd>

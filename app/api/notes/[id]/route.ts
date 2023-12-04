@@ -40,7 +40,7 @@ export async function DELETE(request: Request, { params }: NoteProps) {
 	const note = await prisma.note.findUnique({ where: { id: parseInt(params.id) } });
 
 	if (!note) {
-		return Response.json({ data: 'Invalid note' }, { status: 404 });
+		return Response.json({ data: "Invalid note" }, { status: 404 });
 	}
 
 	await prisma.note.delete({
@@ -51,3 +51,9 @@ export async function DELETE(request: Request, { params }: NoteProps) {
 
 	return Response.json({});
 }
+
+function delay(time: number) {
+	return new Promise(resolve => setTimeout(resolve, time));
+  } 
+
+
