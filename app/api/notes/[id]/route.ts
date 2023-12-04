@@ -1,5 +1,7 @@
+import { AuthOpts } from "@/app/shared/auth/AuthOptions";
 import { noteSchema } from "@/app/validationSchemas";
 import prisma from "@/prisma/prismaClient";
+import { getServerSession } from "next-auth";
 
 interface NoteProps {
 	params: {
@@ -8,12 +10,18 @@ interface NoteProps {
 }
 
 export async function PATCH(request: Request, { params }: NoteProps) {
+	const session = await getServerSession(AuthOpts);
 	const body = await request.json();
 	const existingNote = await prisma.note.findUnique({
 		where: {
 			id: parseInt(params.id),
 		},
 	});
+
+	if(!session){
+		return Response.json({}, {status: 404})
+	}
+
 	if (!existingNote) {
 		return Response.json("Invalid note", { status: 404 });
 	}
@@ -37,7 +45,12 @@ export async function PATCH(request: Request, { params }: NoteProps) {
 }
 
 export async function DELETE(request: Request, { params }: NoteProps) {
+	const session = await getServerSession(AuthOpts);
 	const note = await prisma.note.findUnique({ where: { id: parseInt(params.id) } });
+
+	if(!session){
+		return Response.json({}, {status: 401})
+	}
 
 	if (!note) {
 		return Response.json({ data: "Invalid note" }, { status: 404 });

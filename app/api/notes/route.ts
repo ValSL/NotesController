@@ -1,12 +1,19 @@
+import { AuthOpts } from "@/app/shared/auth/AuthOptions";
 import { noteSchema } from "@/app/validationSchemas";
 import prisma from "@/prisma/prismaClient";
+import { getServerSession } from "next-auth";
 import { z } from "zod";
 
 type NoteRequest = z.infer<typeof noteSchema>;
 
 export async function POST(request: Request) {
+	const session = await getServerSession(AuthOpts);
 	const requestData: NoteRequest = await request.json();
 	const validationResult = noteSchema.safeParse(requestData);
+
+	if(!session){
+		return Response.json({}, {status: 401})
+	}
 
 	if (!validationResult.success) {
 		return Response.json(validationResult.error.errors, { status: 400 });

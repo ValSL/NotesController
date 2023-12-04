@@ -1,4 +1,4 @@
-import { Menu, MenuTarget, Avatar, MenuDropdown, MenuLabel, MenuItem, Text } from "@mantine/core";
+import { Menu, MenuTarget, Avatar, MenuDropdown, MenuLabel, MenuItem, Text, Skeleton } from "@mantine/core";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import React from "react";
@@ -8,6 +8,7 @@ const AuthButton = () => {
 
 	return (
 		<>
+			{status === "loading" && <Skeleton height={18} width={45}/>}
 			{status === "authenticated" && (
 				<Menu>
 					<MenuTarget>

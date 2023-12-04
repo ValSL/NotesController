@@ -7,6 +7,9 @@ import { notFound } from "next/navigation";
 import NoteDetails from "../components/NoteDetails";
 import classes from "./edit.module.css";
 import DeleteNoteButton from "../components/DeleteNoteButton";
+import { useSession } from "next-auth/react";
+import { getServerSession } from "next-auth";
+import { AuthOpts } from "@/app/shared/auth/AuthOptions";
 
 interface NoteDetailProps {
 	params: {
@@ -15,6 +18,8 @@ interface NoteDetailProps {
 }
 
 const NoteDetailPage = async ({ params }: NoteDetailProps) => {
+	const session = await getServerSession(AuthOpts);
+
 	const note: Note | null = await prisma.note.findUnique({
 		where: {
 			id: parseInt(params.id),
@@ -30,12 +35,14 @@ const NoteDetailPage = async ({ params }: NoteDetailProps) => {
 			<Box className={classes.mainContent}>
 				<NoteDetails note={note} />
 			</Box>
-			<Flex direction='column' gap="1rem">
-				<Button leftSection={<Pencil2Icon />} component={Link} href={`/notes/edit/${params.id}`}>
-					Edit note
-				</Button>
-				<DeleteNoteButton id={params.id}/>
-			</Flex>
+			{session && (
+				<Flex direction="column" gap="1rem">
+					<Button leftSection={<Pencil2Icon />} component={Link} href={`/notes/edit/${params.id}`}>
+						Edit note
+					</Button>
+					<DeleteNoteButton id={params.id} />
+				</Flex>
+			)}
 		</SimpleGrid>
 	);
 };
