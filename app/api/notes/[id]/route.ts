@@ -1,5 +1,5 @@
 import { AuthOpts } from "@/app/shared/auth/AuthOptions";
-import { noteSchema } from "@/app/validationSchemas";
+import { noteSchema, patchNoteSchema } from "@/app/validationSchemas";
 import prisma from "@/prisma/prismaClient";
 import { getServerSession } from "next-auth";
 
@@ -26,11 +26,11 @@ export async function PATCH(request: Request, { params }: NoteProps) {
 		return Response.json("Invalid note", { status: 404 });
 	}
 
-	const validationResult = noteSchema.safeParse(body);
+	const validationResult = patchNoteSchema.safeParse(body);
 	if (!validationResult.success) {
 		return Response.json(validationResult.error.format(), { status: 400 });
 	}
-
+	
 	const updatedNote = await prisma.note.update({
 		where: {
 			id: existingNote.id,
@@ -38,6 +38,7 @@ export async function PATCH(request: Request, { params }: NoteProps) {
 		data: {
 			title: body.title,
 			description: body.description,
+			tagUserId: body.tagUserId
 		},
 	});
 
@@ -64,9 +65,5 @@ export async function DELETE(request: Request, { params }: NoteProps) {
 
 	return Response.json({});
 }
-
-function delay(time: number) {
-	return new Promise(resolve => setTimeout(resolve, time));
-  } 
 
 

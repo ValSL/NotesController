@@ -21,7 +21,7 @@ interface NoteDetailProps {
 const NoteDetailPage = async ({ params }: NoteDetailProps) => {
 	const session = await getServerSession(AuthOpts);
 
-	const note: Note | null = await prisma.note.findUnique({
+	const note = await prisma.note.findUnique({
 		where: {
 			id: parseInt(params.id),
 		},
@@ -38,7 +38,7 @@ const NoteDetailPage = async ({ params }: NoteDetailProps) => {
 			</Box>
 			{session && (
 				<Flex direction="column" gap="1rem">
-					<TagSelect />
+					<TagSelect note={note} />
 					<Button leftSection={<Pencil2Icon />} component={Link} href={`/notes/edit/${params.id}`}>
 						Edit note
 					</Button>

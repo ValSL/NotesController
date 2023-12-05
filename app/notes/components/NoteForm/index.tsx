@@ -34,7 +34,6 @@ const NoteForm = ({ note }: { note?: Note }) => {
 	const submitHandler: SubmitHandler<NewNoteForm> = async (data) => {
 		try {
 			setIsSubmitting(true);
-			console.log(data);
 
 			if (note) {
 				await axios.patch("/api/notes/" + note.id, data);
