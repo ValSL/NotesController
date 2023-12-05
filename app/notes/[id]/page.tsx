@@ -10,6 +10,7 @@ import DeleteNoteButton from "../components/DeleteNoteButton";
 import { useSession } from "next-auth/react";
 import { getServerSession } from "next-auth";
 import { AuthOpts } from "@/app/shared/auth/AuthOptions";
+import TagSelect from "../components/TagSelect";
 
 interface NoteDetailProps {
 	params: {
@@ -37,6 +38,7 @@ const NoteDetailPage = async ({ params }: NoteDetailProps) => {
 			</Box>
 			{session && (
 				<Flex direction="column" gap="1rem">
+					<TagSelect />
 					<Button leftSection={<Pencil2Icon />} component={Link} href={`/notes/edit/${params.id}`}>
 						Edit note
 					</Button>

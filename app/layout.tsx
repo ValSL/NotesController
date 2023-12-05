@@ -8,6 +8,7 @@ import { theme } from "./theme";
 import { ModalsProvider } from "@mantine/modals";
 import { Notifications } from "@mantine/notifications";
 import AuthProvider from "./providers/AuthProvider";
+import ReactQueryClientProvider from "./providers/QueryClientProvider";
 
 export const metadata: Metadata = {
 	title: "Create Next App",
@@ -23,15 +24,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 			{/* <body className={inter.className}> */}
 			<body>
 				<MantineProvider theme={theme}>
-					<ModalsProvider>
-						<AuthProvider>
-							<Notifications />
-							<NavBar />
-							<Container size="lg">
-								<main className="p-5">{children}</main>
-							</Container>
-						</AuthProvider>
-					</ModalsProvider>
+					<ReactQueryClientProvider>
+						<ModalsProvider>
+							<AuthProvider>
+								<Notifications />
+								<NavBar />
+								<Container size="lg">
+									<main className="p-5">{children}</main>
+								</Container>
+							</AuthProvider>
+						</ModalsProvider>
+					</ReactQueryClientProvider>
 				</MantineProvider>
 			</body>
 		</html>
