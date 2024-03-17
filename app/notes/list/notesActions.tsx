@@ -1,13 +1,14 @@
-import { Button } from "@mantine/core";
+import { Button, Flex } from "@mantine/core";
 import Link from "next/link";
-
+import StatusFilter from "./statusFilter";
 const NotesActions = () => {
 	return (
-		<div className="mb-5">
+		<Flex className="mb-5" justify='space-between'>
+			<StatusFilter/>
 			<Button component={Link} href="/notes/new">
 				New Note
 			</Button>
-		</div>
+		</Flex>
 	);
 };
 

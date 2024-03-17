@@ -2,26 +2,34 @@ import prisma from "@/prisma/prismaClient";
 import { Table, TableTbody, TableTd, TableTh, TableThead, TableTr } from "@mantine/core";
 import NotesActions from './notesActions';
 import { CustomLink, NoteBadge } from "@/app/components";
+import { Status } from "@prisma/client";
 
 export const dynamic = 'force-dynamic';
 
-const NotesPage = async () => {
-	const notes = await prisma.note.findMany();
+const NotesPage = async ({ searchParams }: { searchParams: { status: Status } }) => {
+	const validStatuses = Object.values(Status)
+	const filterStatus = validStatuses.includes(searchParams.status) ? searchParams.status : undefined
+
+	const notes = await prisma.note.findMany({
+		where: {
+			status: filterStatus
+		}
+	});
 
 	const rows = notes.map((element) => (
 		<TableTr key={element.id}>
 			<TableTd>
 				<CustomLink href={`/notes/${element.id}`}>{element.title}</CustomLink>
-				<div className="block md:hidden"><NoteBadge status={element.status}/></div>
+				<div className="block md:hidden"><NoteBadge status={element.status} /></div>
 			</TableTd>
-			<TableTd className="hidden md:table-cell"><NoteBadge status={element.status}/></TableTd>
+			<TableTd className="hidden md:table-cell"><NoteBadge status={element.status} /></TableTd>
 			<TableTd className="hidden md:table-cell">{element.description}</TableTd>
 		</TableTr>
 	));
 
 	return (
 		<div>
-			<NotesActions/>
+			<NotesActions />
 			<Table>
 				<TableThead>
 					<TableTr>

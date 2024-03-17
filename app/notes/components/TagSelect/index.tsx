@@ -6,51 +6,42 @@ import {
 	ComboboxOption,
 	ComboboxOptions,
 	ComboboxTarget,
-	Group,
 	InputBase,
 	InputPlaceholder,
 	Skeleton,
 	Text,
 	useCombobox,
 } from "@mantine/core";
+import { notifications } from '@mantine/notifications';
 import { Note, User } from "@prisma/client";
+import { IconX } from '@tabler/icons-react';
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useQuery } from "react-query";
-import { notifications } from '@mantine/notifications';
-import { IconX } from '@tabler/icons-react';
-
-function SelectOption({ name }: { name?: string | null; }) {
-	return (
-		<Text fz="sm" fw={500}>
-			{name}
-		</Text>
-	);
-}
 
 const TagSelect = ({ note }: { note: Note; }) => {
 	const combobox = useCombobox({
 		onDropdownClose: () => combobox.resetSelectedOption(),
 	});
 	const router = useRouter();
-
 	const [value, setValue] = useState<string | null>(note.tagUserId);
+	const { isLoading, data: users, error, isSuccess } = useUsers();
 
-	const {
-		isLoading,
-		data: users,
-		error,
-		isSuccess,
-	} = useQuery<User[]>({
-		queryKey: ["users"],
-		queryFn: async () => {
-			const res = await axios.get("/api/users");
-			return res.data;
-		},
-		staleTime: 6000,
-		retry: 3,
-	});
+	const tagUser = async (tagUserId: string) => {
+		try {
+			const id = tagUserId === '' ? null : tagUserId;
+			await axios.patch(`/api/notes/${note.id}`, { tagUserId: id });
+		}
+		catch {
+			combobox.closeDropdown();
+			showFailedTagNorification();
+			return;
+		}
+		setValue(tagUserId);
+		combobox.closeDropdown();
+		router.refresh();
+	};
 
 	if (isLoading) return <Skeleton height={38} width={200} />;
 	if (error) return null;
@@ -63,35 +54,11 @@ const TagSelect = ({ note }: { note: Note; }) => {
 			</ComboboxOption>
 		));
 
-
-
 		return (
 			<Combobox
 				store={combobox}
 				withinPortal={false}
-				onOptionSubmit={async (tagUserId) => {
-					try {
-						const id = tagUserId === '' ? null : tagUserId;
-						await axios.patch(`/apsi/notes/${note.id}`, { tagUserId: id });
-					}
-					catch {
-						combobox.closeDropdown();
-						notifications.show({
-							id: 'assign-failed',
-							withCloseButton: true,
-							autoClose: 5000,
-							title: "Error",
-							message: 'User has not been tagged',
-							color: 'red',
-							icon: <IconX />,
-							loading: false,
-						});
-						return;
-					}
-					setValue(tagUserId);
-					combobox.closeDropdown();
-					router.refresh();
-				}}
+				onOptionSubmit={tagUser}
 			>
 				<ComboboxTarget>
 					<InputBase
@@ -123,5 +90,34 @@ const TagSelect = ({ note }: { note: Note; }) => {
 		);
 	}
 };
+
+function SelectOption({ name }: { name?: string | null; }) {
+	return (
+		<Text fz="sm" fw={500}>
+			{name}
+		</Text>
+	);
+}
+
+const useUsers = () => useQuery<User[]>({
+	queryKey: ["users"],
+	queryFn: async () => {
+		const res = await axios.get("/api/users");
+		return res.data;
+	},
+	staleTime: 6000,
+	retry: 3,
+});
+
+const showFailedTagNorification = () => notifications.show({
+	id: 'assign-failed',
+	withCloseButton: true,
+	autoClose: 5000,
+	title: "Error",
+	message: 'User has not been tagged',
+	color: 'red',
+	icon: <IconX />,
+	loading: false,
+});
 
 export default TagSelect;
