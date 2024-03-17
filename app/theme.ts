@@ -1,9 +1,10 @@
 import { createTheme } from "@mantine/core";
-import { Inter } from "next/font/google";
+import { Inter, Asap } from "next/font/google";
 
 const inter = Inter({ subsets: ["latin"] });
+const asap = Asap({ subsets: ["latin"] });
 
 export const theme = createTheme({
-	fontFamily: inter.style.fontFamily,
+	fontFamily: asap.style.fontFamily,
 	primaryColor: "violet",
 });

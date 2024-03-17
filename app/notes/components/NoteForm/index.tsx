@@ -50,6 +50,16 @@ const NoteForm = ({ note }: { note?: Note }) => {
 		setIsSubmitting(false);
 	};
 
+	const click = async () => {
+		try {
+			const result = await axios.post("/api/test");
+			// const result = await fetch("https://jsonplaceholder.typicode.com/todos/1");
+			console.log(result);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	return (
 		<div className="max-w-xl">
 			{error && (
@@ -57,7 +67,7 @@ const NoteForm = ({ note }: { note?: Note }) => {
 					{error}
 				</Alert>
 			)}
-
+			<Button onClick={click}>Test</Button>
 			<form className="space-y-3" onSubmit={handleSubmit(submitHandler)}>
 				<TextInput defaultValue={note?.title} placeholder="Title" {...register("title")} />
 				<ErrorMessage>{errors.title?.message}</ErrorMessage>

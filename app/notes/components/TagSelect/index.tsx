@@ -18,8 +18,10 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useQuery } from "react-query";
+import { notifications } from '@mantine/notifications';
+import { IconX } from '@tabler/icons-react';
 
-function SelectOption({ name }: {name?: string | null}) {
+function SelectOption({ name }: { name?: string | null; }) {
 	return (
 		<Text fz="sm" fw={500}>
 			{name}
@@ -27,7 +29,7 @@ function SelectOption({ name }: {name?: string | null}) {
 	);
 }
 
-const TagSelect = ({ note }: { note: Note }) => {
+const TagSelect = ({ note }: { note: Note; }) => {
 	const combobox = useCombobox({
 		onDropdownClose: () => combobox.resetSelectedOption(),
 	});
@@ -61,18 +63,34 @@ const TagSelect = ({ note }: { note: Note }) => {
 			</ComboboxOption>
 		));
 
-		
+
 
 		return (
 			<Combobox
 				store={combobox}
 				withinPortal={false}
-				onOptionSubmit={(tagUserId) => {
+				onOptionSubmit={async (tagUserId) => {
+					try {
+						const id = tagUserId === '' ? null : tagUserId;
+						await axios.patch(`/apsi/notes/${note.id}`, { tagUserId: id });
+					}
+					catch {
+						combobox.closeDropdown();
+						notifications.show({
+							id: 'assign-failed',
+							withCloseButton: true,
+							autoClose: 5000,
+							title: "Error",
+							message: 'User has not been tagged',
+							color: 'red',
+							icon: <IconX />,
+							loading: false,
+						});
+						return;
+					}
 					setValue(tagUserId);
-					const id = tagUserId === '' ? null : tagUserId;
-					axios.patch(`/api/notes/${note.id}`, { tagUserId: id });
-					router.refresh();
 					combobox.closeDropdown();
+					router.refresh();
 				}}
 			>
 				<ComboboxTarget>
